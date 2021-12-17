@@ -1,3 +1,3 @@
 print('Play with git')
 
-print('Play with git again in master')
+print('Play with git again in lesson 1')
