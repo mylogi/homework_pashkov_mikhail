@@ -6,6 +6,7 @@
 
 # Use `print` in different ways
 
+# Hello, world!; Hello world; Hello world; Hello, Bob!
 print('Hello, world!')
 
 print('Hello world')
@@ -20,7 +21,7 @@ print("""Hello, Bob!""")
 
 # For readability
 print('\n')
-
+# 1|2|3
 print(1, 2, 3, sep='|')
 
 print(1, 2, 3, sep='\n')
