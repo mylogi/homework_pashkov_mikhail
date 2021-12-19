@@ -46,3 +46,35 @@ def sum_of_squares(*args):
 
 
 print(sum_of_squares(2, 3, 3, 5, 1, 6))
+
+
+# Dictionary:
+def build_pet(species, name, **pet_info):
+    pet = {}
+    pet['species'] = species
+    pet['name'] = name
+    for key, value in pet_info.items():
+        pet[key] = value
+    return pet
+
+
+my_pet = build_pet('Husky', 'Doge', color='White', age=2)
+print(my_pet)
+
+"""A tree of size
+   *
+  ***
+ *****
+"""
+
+
+def print_tree(n):
+    for i in range(n):
+        for j in range(n - i):
+            print(' ', end='')
+        for k in range(2 * i + 1):
+            print('*', end='')
+        print()
+
+
+print_tree(7)
