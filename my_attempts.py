@@ -64,16 +64,16 @@
 #     print('Do important logic here.')
 #     i += 1
 
-our_threshold = 6
-i = 0
-
-while i < our_threshold:
-    print(f'Variable i: {i}.', end=" ")
-    print('Do important logic here.')
-    i += 1
-    if i % 7 == 0:
-        print('Something went wrong')
-        everything_ok = False
-        break
-else:
-    print('This very important logic will take place only if nothing broken')
+# our_threshold = 6
+# i = 0
+#
+# while i < our_threshold:
+#     print(f'Variable i: {i}.', end=" ")
+#     print('Do important logic here.')
+#     i += 1
+#     if i % 7 == 0:
+#         print('Something went wrong')
+#         everything_ok = False
+#         break
+# else:
+#     print('This very important logic will take place only if nothing broken')
