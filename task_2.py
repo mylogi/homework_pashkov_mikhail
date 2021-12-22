@@ -4,9 +4,15 @@ Save your first and last name as separate variables, then use string concatenati
 space in between and print a greeting.
 """
 
+
 # Task_2:
 
-first_name = 'Michael'
-last_name = 'Pashkov'
+def concatenation():
+    first_name = 'Michael'
+    last_name = 'Pashkov'
 
-print('Hello slow', first_name + " " + last_name + "!", 'Look already snow!')
+    print('Hello slow', first_name + " " + last_name + "!", 'Look already snow!')
+
+
+if __name__ == '__main__':
+    concatenation()
