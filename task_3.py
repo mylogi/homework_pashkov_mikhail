@@ -11,15 +11,21 @@ Make a program with 2 numbers saved in separate variables a and b, then print th
     Floor division
 """
 
+
 # Program:
 
-a = 4
-b = 9
+def make_operations():
+    a = 4
+    b = 9
 
-print('4 + 9 = ' + str(a + b))
-print('4 - 9 = ' + str(a - b))
-print('9 / 4 = ' + str(b / a))
-print('9 ** 4 = ' + str(b ** a))
-print('9 exponent 4 = ' + str(pow(b, a)))
-print('9 % 4 = ' + str(b % a))
-print('9 // 4 = ' + str(b // a))
+    print('4 + 9 = ' + str(a + b))
+    print('4 - 9 = ' + str(a - b))
+    print('9 / 4 = ' + str(b / a))
+    print('9 ** 4 = ' + str(b ** a))
+    print('9 exponent 4 = ' + str(pow(b, a)))
+    print('9 % 4 = ' + str(b % a))
+    print('9 // 4 = ' + str(b // a))
+
+
+if __name__ == '__main__':
+    make_operations()
