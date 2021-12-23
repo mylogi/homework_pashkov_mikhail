@@ -47,8 +47,12 @@ if your input is “Anton” and the stored name is “anton”, it should retur
 
 # Program_4:
 
+# print(f'Name is {"" if "mikhail" == input("Enter the name: ").lower() else "not "}equal to name from input')
+
+# Program_5:
+
 def is_name_valid(name_from_storage: str, name_from_input: str) -> bool:
-    return name_from_storage == name_from_input
+    return name_from_storage == name_from_input.lower()
 
 
 def name_check() -> None:
