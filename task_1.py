@@ -10,8 +10,6 @@ What happens if you change oops to raise KeyError instead of IndexError?
 
 def oops():
     raise KeyError
-
-
 # raise IndexError
 
 
