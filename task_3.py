@@ -29,9 +29,13 @@ def get_string(input_string: str) -> list[str]:
 
 def main():
     input_string = input('Enter your word: ')
-    result = get_string(input_string=input_string)
-
-    print('\n', result[0], result[1], result[2], result[3], result[4], sep='\n')
+    result = get_string(input_string)
+    new_result = '\n'.join(result[: 5])
+    # for item in result[: 5]:
+    #     print(item)
+    # print('\n', result[0], result[1], result[2], result[3], result[4], sep='\n')
+    print(new_result)
+    # [print(result[x]) for x in range(5)]
 
 
 if __name__ == '__main__':
