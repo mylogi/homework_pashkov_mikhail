@@ -4,7 +4,7 @@ path_to_this_file = pathlib.Path(__file__)
 
 path_to_parent = path_to_this_file.parent
 
-path_to_created_file = path_to_parent.joinpath('my_file_task_1.txt')
+path_to_created_file = path_to_parent.joinpath('my_file.txt')
 
 if __name__ == '__main__':
     print(path_to_this_file)

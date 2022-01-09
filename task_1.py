@@ -12,3 +12,5 @@ Note: file write methods do not add newline characters to your strings; add an e
 if you want to fully terminate the line in the file.
 
 """
+
+# Done in other files.
