@@ -7,10 +7,6 @@ like this: “Hello, my name is Carl Johnson and I’m 26 years old”.
 """
 
 
-def talk(firstname, lastname, age):
-    print(f'Hello, my name is {firstname} {lastname} and I’m {age} years old')
-
-
 class Person:
     firstname = 'Carl'
     lastname = 'Johnson'
@@ -21,9 +17,17 @@ class Person:
         self.lastname = lastname
         self.age = age
 
+    def talk(self, first_name=firstname, last_name=lastname, age_2=age):
+        self.firstname = first_name
+        self.lastname = last_name
+        self.age = age_2
+        print(f'Hello, my name is {first_name} {last_name} and I’m {age_2} years old')
+
 
 def main():
-    talk(Person.firstname, Person.lastname, Person.age)
+    carl = Person('John', 'Carlson', 62)
+    print(carl.firstname, carl.lastname, carl.age)
+    carl.talk('Carl', 'Johnson', 26)
 
 
 if __name__ == '__main__':
