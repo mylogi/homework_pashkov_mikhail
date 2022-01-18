@@ -73,12 +73,30 @@ def search_function(readed_data: dict) -> list:
     return list_of_id_contacts
 
 
-def search() -> None:
+def search():
     read_data_as_string = path_to_json_file.read_text()
     readed_data = json.loads(read_data_as_string)
 
     search_process_result = search_function(readed_data)
     print()  # space
+
+    if not search_process_result:
+        print('There is no such contact. Try something else.')
+    else:
+        for id_contact, data_contact in readed_data.items():
+            if len(search_process_result) >= 2:
+                print(f'{data_contact}\n---')
+            elif id_contact in search_process_result:
+                for k, v in data_contact.items():
+                    print(f'{k}: {v}')
+
+
+def delete_contact() -> None:
+    read_data_as_string = path_to_json_file.read_text()
+    readed_data = json.loads(read_data_as_string)
+
+    print('Please, select a contact card to delete.')
+    search_process_result = search_function(readed_data)
 
     for id_contact, data_contact in readed_data.items():
         if len(search_process_result) >= 2:
@@ -88,6 +106,13 @@ def search() -> None:
                 print(f'{k}: {v}')
         elif not search_process_result:
             print('There is no such contact. Try something else.')
+    if search_process_result != [] and type(search_process_result) == list:
+        user_agreement = input('\nDo you agree to delete these contacts? (y/n): ').lower()
+        if user_agreement == 'y':
+            for id_item in search_process_result:
+                del readed_data[id_item]
+            load_data_as_string = json.dumps(readed_data, indent=2)
+            path_to_json_file.write_text(load_data_as_string)
 
 
 def main():
@@ -111,7 +136,7 @@ def main():
         elif user_choice == 3:
             print("update_contact")
         elif user_choice == 4:
-            print("delete_contact")
+            delete_contact()
         else:
             print('No such function! Make a choice (1-4)')
 
