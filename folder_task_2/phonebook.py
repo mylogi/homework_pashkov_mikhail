@@ -1,70 +1,66 @@
 import json
+import uuid
 
 from path_file import path_to_json_file
 
 
-def first_task_after_turn():
-    phonebook_dict_json_loads = path_to_json_file.read_text()
+def add_entries() -> None:
+    read_data_as_string = path_to_json_file.read_text()
+    readed_data = json.loads(read_data_as_string)
 
-    return json.loads(phonebook_dict_json_loads)
+    first_name = input("Enter contact's first name: ")
+    last_name = input("Enter contact's last name: ")
+    phone_number = input("Enter contact's phone number: ")
+    state = input("Enter state: ")
 
+    readed_data.update({
+        str(uuid.uuid4()): {
+            'First Name': first_name,
+            'Last Name': last_name,
+            'Phone number': phone_number,
+            'State': state
+        }
+    })
 
-def first_question():
-    first_input = input(
-        'Hello! What does number interest you?\nDont know number - please pass s\nOr pass number:').lower()
-    # if first_input == 's':
-    #     return first_input
-    # elif first_input.isdigit() and len(first_input) == 10:
-    #     return first_input
-    if first_input != 's' or (first_input.isdigit() and len(first_input) == 10):
-        first_question()
-    else:
-        return first_input
-
-
-def search(search_query, readed_data):
-    if search_query == 's':
-        search_input = input('\nPlease choice:\nFirst name search - F'
-                             '\nLast name search - L'
-                             '\nCity search - C'
-                             '\nState search - S'
-                             '\nFull name search - FL'
-                             '\nTelephone search - T'
-                             '\nDo choice: ').lower()
-        if search_input in ['f', 'l', 'c', 's', 'fl', 't']:
-            return search_input
-    else:
-        for key, value in readed_data.items():
-            if key == search_query:
-                print(f'{key}: {value}')
-                return False
+    load_data_as_string = json.dumps(readed_data, indent=2)
+    path_to_json_file.write_text(load_data_as_string)
 
 
-def search_first_name(search_input, readed_data):
-    if not search_input:
-        return False
-    elif search_input == 'f':
-        first_name_input = input('Enter the first name: ').lower()
-        for key, value in readed_data.items():
-            if value['first_name'].lower() == first_name_input:
-                print(f'{key}: {value}')
-                main()
-            else:
-                return True
-
-
-def last_task_after_turn(readed_data):
-    phonebook_dict_json_dumps = json.dumps(readed_data, indent=2)
-
-    path_to_json_file.write_text(phonebook_dict_json_dumps)
+# def first_task_after_turn():
+#     phonebook_dict_json_loads = path_to_json_file.read_text()
+#
+#     return json.loads(phonebook_dict_json_loads)
+#
+# def last_task_after_turn(readed_data):
+#     phonebook_dict_json_dumps = json.dumps(readed_data, indent=2)
+#
+#     path_to_json_file.write_text(phonebook_dict_json_dumps)
 
 
 def main():
-    readed_data = first_task_after_turn()
-    # last_task_after_turn(readed_data)
-    search_query = first_question()
-    search_input = search(search_query, readed_data)
-    search_first_name(search_input, readed_data)
+    while True:
+        print('Hello! What do you want to do?\n')
+        print('1 - Add new entries')
+        print('2 - Search contact')
+        print('3 - Update contact')
+        print('4 - Delete contact\n')
+
+        try:
+            user_choice = int(input('Your input: '))
+        except ValueError:
+            print('Try once more! Make a choice (1-4)')
+            continue
+
+        if user_choice == 1:
+            add_entries()
+        elif user_choice == 2:
+            print("search")
+        elif user_choice == 3:
+            print("update_contact")
+        elif user_choice == 4:
+            print("delete_contact")
+        else:
+            print('No such function! Make a choice (1-4)')
 
 
 if __name__ == '__main__':
