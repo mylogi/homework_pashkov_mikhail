@@ -18,6 +18,3 @@ present in the folder with application, else raise an error. After the user exit
 JSON.
 
 """
-search_list = ["asdsadsdasd", 2, 3]
-laa = len(search_list)
-print(laa)
