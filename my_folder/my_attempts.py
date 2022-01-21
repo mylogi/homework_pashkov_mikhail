@@ -1,115 +1,306 @@
 # Example 1
 
-# import time
+# class Person:
+#
+#     def __init__(self, first_name, last_name):
+#         self.first_name = first_name
+#         self.last_name = last_name
+#
+#     @property
+#     def full_name(self):
+#         return self.first_name.title() + ' ' + self.last_name.title()
+#
+#     @property
+#     def initials(self):
+#         return self.first_name[0].upper() + self.last_name[0].upper()
 #
 #
-# def time_function(f):
-#     def wrapper(*args, **kwargs):
-#         start = time.time()
-#         result = f(*args, **kwargs)
-#         end = time.time()
-#         print(f.__name__ + " took " + str((end - start) * 1000) + "ms")
-#         return result
-#     return wrapper
-#
-#
-# @time_function
-# def square_numbers(num_list):
-#     new_list = []
-#     for num in num_list:
-#         new_list.append(num ** 2)
-#     return new_list
-#
-#
-# @time_function
-# def cube_numbers(num_list):
-#     new_list = []
-#     for num in num_list:
-#         new_list.append(num ** 3)
-#     return new_list
-#
-#
-# my_list = [1, 2, 3, 4, 5, 6]
-# my_list_squared = square_numbers(my_list)
-# my_list_cubed = cube_numbers(my_list)
-# print(my_list_squared)
-# print(my_list_cubed)
+# cj = Person('carl', 'johnson')
+# print(cj.full_name)
+# print(cj.initials)
+# cj.first_name = 'Buster'
+# print(cj.full_name)
+# print(cj.initials)
 
 
 # Example 2
 
-# def first_decorator(func):
-#     def wrap():
-#         print('before')
-#         func()
-#         print('after')
+# class Person:
 #
-#     return wrap
+#     def __init__(self, first_name, last_name):
+#         self.first_name = first_name
+#         self.last_name = last_name
+#
+#     @property
+#     def full_name(self):
+#         return self.first_name.title() + ' ' + self.last_name.title()
+#
+#     @property
+#     def initials(self):
+#         return self.first_name[0].upper() + self.last_name[0].upper()
+#
+#     @full_name.setter
+#     def full_name(self, name):
+#         first, last = name.split(' ')
+#         self.first_name = first.title()
+#         self.last_name = last.title()
+#
+#     @full_name.deleter
+#     def full_name(self):
+#         self.first_name = None
+#         self.last_name = None
+#         print('Deleted')
 #
 #
-# @first_decorator
-# def test():
-#     """test function docs"""
-#     print('inside text')
-#
-#
-# test()
-# print(test.__name__)
-# print(test.__doc__)
+# cj = Person('carl', 'johnson')
+# print(cj.full_name)
+# print(cj.initials)
+# # cj.full_name = 'Buster Karlson'
+# del cj.full_name
+# print(cj.first_name, cj.last_name)
+# # print(cj.initials)
 
 
 # Example 3
 
-# from functools import wraps
+# class Test:
+#     def __init__(self, var):
+#         self._var = var
+#
+#     @property
+#     def get_var(self):
+#         """return value of_var"""
+#         return self._var
+#
+#     @get_var.setter
+#     def set_var(self, value):
+#         self._var = value
+#
+#     @get_var.deleter
+#     def det_var(self):
+#         del self._var
 #
 #
-# def first_decorator(func):
-#     @wraps(func)
-#     def wrap():
-#         print('before')
-#         func()
-#         print('after')
+# t = Test(1)
+# print(t.get_var)
 #
-#     return wrap
-#
-#
-# @first_decorator
-# def test():
-#     """test function docs"""
-#     print('inside text')
-#
-#
-# test()
-# print(test.__name__)
-# print(test.__doc__)
+# t.set_var = 10
+# print(t.get_var)
 
 
 # Example 4
 
-# from functools import wraps
+# class Test:
+#     def __init__(self, x):
+#         self.x = x
+#
+#     @staticmethod
+#     def t(a, b):
+#         return a + b
 #
 #
-# def add_brake_log(size=2):
-#     def add_brake_log_dec(func):
-#         @wraps(func)
-#         def wrap(*args, **kwargs):
-#             for _ in range(size):
-#                 print("_" * 80)
-#             func(*args, **kwargs)
-#             for _ in range(size):
-#                 print("_" * 80)
+# t = Test(1)
+# print(t.t(10, 20))
+
+
+# Example 5
+
+# class Base:
+#     _x = 1
 #
-#         return wrap
-#
-#     return add_brake_log_dec
-#
-#
-# @add_brake_log(size=2)
-# def test():
-#     """test function docs"""
-#     print('inside text')
+#     @classmethod
+#     def test(cls):
+#         return f'hello from class: {cls.__name__}, value: {cls._x}'
 #
 #
-# test()
-# print(test.__name__)
-# print(test.__doc__)
+# b = Base
+# print(b.test())
+#
+#
+# class Derived(Base):
+#     _x = 100
+#
+#
+# d = Derived()
+# print(d.test())
+
+
+# Example 6
+
+# class MyAttr:
+#
+#     def __get__(self, instance, owner):
+#         print('get invoked')
+#         return 42
+#
+#     def __set__(self, instance, value):
+#         print('set invoked')
+#
+#
+# class Base:
+#     ...
+#
+#
+# Base.a = 1
+# Base.d = MyAttr()
+# print(Base.d)
+#
+# print(Base.__dict__)
+#
+# b = Base()
+# b.d = 20
+# print(b.d)
+#
+# print(b.__dict__)
+#
+# print(b.__class__.__mro__)
+#
+# Base.d = 1
+# print(Base.__dict__)
+#
+# b2 = Base()
+# b.d = 20
+# print(b.d)
+
+
+# Example 7
+
+# class MyAttr:
+#
+#     def __init__(self, name):
+#         self.name = name
+#
+#     def __get__(self, instance, owner):
+#         print('get invoked')
+#         if instance is None:
+#             return self
+#         return instance.__dict__[self.name]
+#
+#     def __set__(self, instance, value):
+#         print('set invoked')
+#         if value > 0:
+#             instance.__dict__[self.name] = value
+#             return
+#         raise ValueError('value mast be > 0')
+#
+#
+# class ValidContainer:
+#     x = MyAttr('x')
+#     y = MyAttr('y')
+#
+#     def __init__(self, a, b):
+#         self.x = a
+#         self.y = b
+#
+#
+# q = ValidContainer(1, 2)
+#
+# print(q.x)
+#
+# print(q.__dict__)
+
+
+# Example 8
+
+# class MyAttr:
+#
+#     def __init__(self, name):
+#         self.name = name
+#
+#     def __set__(self, instance, value):
+#         print('set invoked')
+#         if value > 0:
+#             instance.__dict__[self.name] = value
+#             return
+#         raise ValueError('value mast be > 0')
+#
+#
+# class ValidContainer:
+#     x = MyAttr('x')
+#     y = MyAttr('y')
+#
+#     def __init__(self, a, b):
+#         self.x = a
+#         self.y = b
+#
+#
+# q = ValidContainer(1, 2)
+#
+# print(q.x)
+#
+# print(q.__dict__)
+
+
+# Example 9
+
+# import time
+#
+#
+# class LongJourney:
+#
+#     def __init__(self):
+#         self.val = self.calc_val()
+#
+#     def calc_val(self):
+#         time.sleep(1)
+#         return 42
+#
+#
+# x = LongJourney()
+# y = LongJourney()
+# z = LongJourney()
+#
+# print(x.val)
+
+
+# Example 10
+
+# import time
+#
+#
+# class MyAttr:
+#
+#     def __init__(self, name):
+#         self.name = name
+#
+#     def __get__(self, instance, owner):
+#         print('invoked')
+#         if instance is None:
+#             return self
+#         val = instance.calc_val()
+#         setattr(instance, self.name, val)
+#         return val
+#
+#
+# class LongJourney:
+#     val = MyAttr('val')
+#
+#     def calc_val(self):
+#         time.sleep(1)
+#         return 42
+#
+#
+# x = LongJourney()
+# y = LongJourney()
+# z = LongJourney()
+#
+# print(x.val)
+# print(x.val)
+
+
+# Example 11
+
+# class ShowDescr:
+#
+#     def test(self, a):
+#         return self + a
+#
+#
+# print(ShowDescr.__dict__)
+#
+# ShowDescr().test
+#
+# x = ShowDescr.test.__get__(2)
+# print(x)
+#
+# print(x(2))
