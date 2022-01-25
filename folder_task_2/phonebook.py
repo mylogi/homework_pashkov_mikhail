@@ -27,6 +27,7 @@ def add_entries() -> None:
 
 
 def search_function(readed_data: dict) -> list:
+    # noinspection PyGlobalUndefined
     global user_search_choice
 
     while True:
@@ -115,13 +116,104 @@ def delete_contact() -> None:
             path_to_json_file.write_text(load_data_as_string)
 
 
+def print_for_update_contact():
+    print('What do you want to change in contact?\n')
+    print('1 - First Name')
+    print('2 - Last Name')
+    print('3 - Phone Number')
+    print('4 - State/City\n')
+
+
+def update_contact() -> None:
+    # noinspection PyGlobalUndefined
+    global user_choice_for_update, selected_contact_card
+
+    read_data_as_string = path_to_json_file.read_text()
+    readed_data = json.loads(read_data_as_string)
+
+    search_process_result = search_function(readed_data)
+    print()  # space
+
+    for id_contact, data_contact in readed_data.items():
+        if id_contact in search_process_result:
+            for k, v in data_contact.items():
+                print(f'{k}: {v}')
+            print()
+    if type(search_process_result) == str:
+        print(search_process_result)
+    elif not search_process_result:
+        print('There is no such contact. Try something else.')
+
+    if search_process_result != [] and type(search_process_result) == list:
+        if len(search_process_result) > 1:
+            unique_search_process_result = []
+            user_input_phone_number = input("More than one contact found. Enter the desired contact's number: ")
+            for id_contact_2, data_contact_2 in readed_data.items():
+                if id_contact_2 in search_process_result:
+                    for k, v in data_contact_2.items():
+                        if k == 'Phone number' and v == user_input_phone_number:
+                            unique_search_process_result.append(id_contact_2)
+
+            print_for_update_contact()
+
+            while True:
+                try:
+                    user_choice_for_update = int(input('Your input: '))
+                    break
+                except ValueError:
+                    print('Try once more! Make a choice (1-4)')
+            try:
+                selected_contact_card = readed_data.get(unique_search_process_result[0])
+            except IndexError:
+                print('\nSorry is not exist number')
+                main()
+    else:
+        print_for_update_contact()
+        while True:
+            try:
+                user_choice_for_update = int(input('Your input: '))
+                break
+            except ValueError:
+                print('Try once more! Make a choice (1-4)')
+                continue
+
+        selected_contact_card = readed_data.get(search_process_result[0])
+    if user_choice_for_update == 1:
+        new_name = input('Please, enter new name: ')
+        selected_contact_card['First Name'] = new_name
+    elif user_choice_for_update == 2:
+        new_name = input('Please, enter new last name: ')
+        selected_contact_card['Last Name'] = new_name
+    elif user_choice_for_update == 3:
+        new_phone = input('Please, enter new phone number: ')
+        selected_contact_card['Number'] = new_phone
+    elif user_choice_for_update == 4:
+        new_state = input('Please, enter new state: ')
+        selected_contact_card['State'] = new_state
+    else:
+        print('No such function! Next time make a choice (1-4)')
+    load_data_as_string = json.dumps(readed_data, indent=2)
+    path_to_json_file.write_text(load_data_as_string)
+
+
+def exit_from_the_program() -> int:
+    exit_input = input('\nDo you want to continue? (y/n): ').lower()
+    if exit_input == 'n':
+        return 1
+    elif exit_input == 'y':
+        return 2
+    else:
+        return 3
+
+
 def main():
     while True:
         print('\nHello! What do you want to do?\n')
         print('1 - Add new entries')
         print('2 - Search contact')
         print('3 - Update contact')
-        print('4 - Delete contact\n')
+        print('4 - Delete contact')
+        print('5 - Exit\n')
 
         try:
             user_choice = int(input('Your input: '))
@@ -134,9 +226,18 @@ def main():
         elif user_choice == 2:
             search()
         elif user_choice == 3:
-            print("update_contact")
+            update_contact()
         elif user_choice == 4:
             delete_contact()
+        elif user_choice == 5:
+            x = exit_from_the_program()
+            if x == 1:
+                break
+            elif x == 2:
+                continue
+            elif x == 3:
+                print("\nWrong pass! Try 'y' or 'no'.")
+                continue
         else:
             print('No such function! Make a choice (1-4)')
 
