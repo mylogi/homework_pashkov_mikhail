@@ -21,12 +21,13 @@ class Person:
         self.firstname = first_name
         self.lastname = last_name
         self.age = age_2
-        print(f'Hello, my name is {first_name} {last_name} and I’m {age_2} years old')
+        print(f'\nHello, my name is {first_name} {last_name} and I’m {age_2} years old')
 
 
 def main():
     carl = Person('John', 'Carlson', 62)
-    print(carl.firstname, carl.lastname, carl.age)
+    print('\n', carl.firstname, carl.lastname, carl.age)
+    carl.talk()
     carl.talk('Carl', 'Johnson', 26)
 
 
