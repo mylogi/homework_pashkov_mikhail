@@ -71,20 +71,24 @@ class ProductStore:
         self.income = 0
 
     def add(self, product, amount):
-        for k in Product.dictionary_of_product.keys():
-            if product not in Product.dictionary_of_product.keys():
-                raise ValueError
-            if k == product:
-                ProductStore.dictionary_of_store[product] = amount
-                for x, y in Product.dictionary_of_product.items():
-                    if x == product:
-                        margin_price = y[1] + y[1] * 0.3
-                        ProductStore.dictionary_of_store_price[product] = [y[0], margin_price]
+        try:
+            for k in Product.dictionary_of_product.keys():
+                if product not in Product.dictionary_of_product.keys():
+                    raise ValueError
+                if k == product:
+                    ProductStore.dictionary_of_store[product] = amount
+                    for x, y in Product.dictionary_of_product.items():
+                        if x == product:
+                            margin_price = y[1] + y[1] * 0.3
+                            ProductStore.dictionary_of_store_price[product] = [y[0], margin_price]
+        except ValueError:
+            print('This is mistake! ValueError')
 
     def set_discount(self, identifier, percent, type_product='name'):
+        percent = percent.replace('%', '')
         for x, y in ProductStore.dictionary_of_store_price.items():
             if x == identifier or y[0] == type_product:
-                y[1] -= y[1] * percent * 0.01
+                y[1] -= y[1] * int(percent) * 0.01
 
     def sell_product(self, product_name, amount):
         for x, y in ProductStore.dictionary_of_store.items():
@@ -96,7 +100,7 @@ class ProductStore:
                         self.income += income
 
     def get_income(self):
-        print(f'\nIncome: {self.income}')
+        print(f'\nIncome: {self.income} $')
 
     def get_all_products(self):
         print('\nAll products:')
@@ -122,7 +126,7 @@ s.add(p_1.name, 10)
 # print(ProductStore.dictionary_of_store)
 # print(ProductStore.dictionary_of_store_price)
 
-s.set_discount('Ramen', 30)
+s.set_discount('Ramen', '30%')
 print(ProductStore.dictionary_of_store_price)
 s.sell_product('Ramen', 25)
 print(ProductStore.dictionary_of_store)
