@@ -62,6 +62,9 @@ class Product:
         self.price = price
         Product.dictionary_of_product[self.name] = [self.type_1, self.price]
 
+    def __repr__(self):
+        return f'Product name: {self.name}, product type: {self.type_1}, product price: {self.price}'
+
 
 class ProductStore:
     dictionary_of_store = {}
@@ -71,6 +74,7 @@ class ProductStore:
         self.income = 0
 
     def add(self, product, amount):
+        product = product.name
         try:
             for k in Product.dictionary_of_product.keys():
                 if product not in Product.dictionary_of_product.keys():
@@ -114,26 +118,31 @@ class ProductStore:
                 print(f'\n{get_tuple}')
 
 
-p_1 = Product('Sport', 'T-Shirt', 100)
-p_2 = Product('Food', 'Ramen', 1.5)
+def main():
+    p_1 = Product('Sport', 'T-Shirt', 100)
+    p_2 = Product('Food', 'Ramen', 1.5)
 
-# print(Product.dictionary_of_product)
+    # print(Product.dictionary_of_product)
 
-s = ProductStore()
-s.add(p_2.name, 300)
-s.add(p_1.name, 10)
+    s = ProductStore()
+    s.add(p_2, 300)
+    s.add(p_1, 10)
 
-# print(ProductStore.dictionary_of_store)
-# print(ProductStore.dictionary_of_store_price)
+    # print(ProductStore.dictionary_of_store)
+    # print(ProductStore.dictionary_of_store_price)
 
-s.set_discount('Ramen', '30%')
-print(ProductStore.dictionary_of_store_price)
-s.sell_product('Ramen', 25)
-print(ProductStore.dictionary_of_store)
-# print(s.income)
-s.get_income()
-s.get_all_products()
-s.get_product_info('Ramen')
+    s.set_discount('Ramen', '30%')
+    print(ProductStore.dictionary_of_store_price)
+    s.sell_product('Ramen', 25)
+    print(ProductStore.dictionary_of_store)
+    # print(s.income)
+    s.get_income()
+    s.get_all_products()
+    s.get_product_info('Ramen')
 
-# s.add("ssss", 23)
-# print(ProductStore.dictionary_of_store)
+    # s.add("ssss", 23)
+    # print(ProductStore.dictionary_of_store)
+
+
+if __name__ == '__main__':
+    main()
