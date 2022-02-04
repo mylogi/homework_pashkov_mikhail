@@ -1,29 +1,55 @@
 # Example 1:
 
-# def fib_iterative(n):
-#     a, b = 0, 1
-#     for _ in range(n):
-#         a, b = b, a + b
-#     return a
-#
-#
-# def fib_recursive(n):
-#     if n == 0 or n == 1:
-#         return n
-#     return fib_recursive(n - 1) + fib_recursive(n - 2)
-#
-#
-# print(fib_iterative(int(input("what fib do you want?: "))))
-# print(fib_recursive(int(input("what fib do you want?: "))))
+class Node:
+
+    def __init__(self, data, next_node=None):
+        self.data = data
+        self.next_node = next_node
 
 
-# Example 2:
+class LinkedList:
 
-# def factorial(n):
-#     print(n)
-#     if n == 1:
-#         return 1
-#     return n * factorial(n - 1)
-#
-#
-# print(factorial(int(input("Give me a number to factorialize: "))))
+    def __init__(self, root=None):
+        self.root = root
+        self.size = 0
+
+    def add(self, data):
+        new_node = Node(data, self.root)
+        self.root = new_node
+        self.size += 1
+
+    def __repr__(self):
+        next_n = self.root
+        res = ""
+
+        while next_n:
+            res += str(next_n.data) + " -> "
+            next_n = next_n.next_node
+        return res
+
+    def remove(self, data):
+        this_node = self.root
+        prev_node = None
+
+        while this_node:
+            if this_node.data == data:
+                if prev_node:
+                    prev_node.next_node = this_node.next_node
+                else:
+                    self.root = this_node.next_node
+                self.size -= 1
+                return True  # Removed the node with value data
+            else:
+                prev_node = this_node
+                this_node = this_node.next_node
+        return False  # did not find node with data
+
+
+my_list = LinkedList()
+my_list.add(5)
+my_list.add(9)
+my_list.add(7)
+print(my_list)
+print(my_list.remove(9))
+print(my_list)
+print(my_list.remove(9))
