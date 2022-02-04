@@ -54,7 +54,7 @@ class Author:
         self.birthday = birthday
 
     def __repr__(self):
-        return str(f'Name: {self.name} Country: {self.country} Birthday: {self.birthday}')
+        return str(f'Name: {self.name}\nCountry: {self.country}\nBirthday: {self.birthday}')
 
     # def __str__(self):
     #     return self.__repr__()
@@ -72,7 +72,7 @@ class Book:
         Book.books_dict[self.name] = {'author': author, 'year': year}
 
     def __repr__(self):
-        return str(f'Name: "{self.name}" Author: {self.author} Year: {self.year}')
+        return str(f'Name: "{self.name}"\nAuthor: {self.author}\nYear: {self.year}')
 
     # def __str__(self):
     #     return self.__repr__()
@@ -111,21 +111,25 @@ class Library:
         ], '\n')
 
 
-if __name__ == '__main__':
-    A_1 = Author('Alexander Pushkin', 'Russian empire', '26/05/1799')
-    A_2 = Author('William Shakespeare', 'England', '26/04/1564')
-    B_1 = Book('Richard III', 1591, A_2)
-    B_2 = Book('Eugene Onegin', 1833, A_1)
-    B_3 = Book('King Lear', 1606, A_2)
-    L_1 = Library('L_1')
+def main():
+    a_1 = Author('Alexander Pushkin', 'Russian empire', '26/05/1799')
+    a_2 = Author('William Shakespeare', 'England', '26/04/1564')
+    b_1 = Book('Richard III', 1591, a_2)
+    b_2 = Book('Eugene Onegin', 1833, a_1)
+    b_3 = Book('King Lear', 1606, a_2)
+    l_1 = Library('l_1')
     # print(Book.books_dict)
-    L_1.new_book('Richard III', 1591, A_2)
-    L_1.new_book('Eugene Onegin', 1833, A_1)
-    L_1.new_book('King Lear', 1606, A_2)
-    print(L_1.books_list_library, '\n')
-    L_1.group_by_author(A_2)
-    L_1.group_by_year(1606)
+    l_1.new_book('Richard III', 1591, a_2)
+    l_1.new_book('Eugene Onegin', 1833, a_1)
+    l_1.new_book('King Lear', 1606, a_2)
+    print(l_1.books_list_library, '\n')
+    l_1.group_by_author(a_2)
+    l_1.group_by_year(1606)
     print(f'Number of books: {Book.books}', '\n')
-    print(A_1, '\n')
-    print(B_1, '\n')
-    print(L_1)
+    print(a_1, '\n')
+    print(b_1, '\n')
+    print(l_1)
+
+
+if __name__ == '__main__':
+    main()
