@@ -9,7 +9,7 @@ class Stack:
         self._items.append(item)
 
     def pop(self):
-        return self._items.pop()
+        return self._items.pop(0)
 
     def peek(self):
         return self._items[len(self._items) - 1]
@@ -20,7 +20,7 @@ class Stack:
     def __repr__(self):
         representation = "<Stack>\n"
         for ind, item in enumerate(reversed(self._items), 1):
-            representation += f"{ind}: {str(item)}\n"
+            representation += f'{ind}: {item}\n'
         return representation
 
     def __str__(self):
