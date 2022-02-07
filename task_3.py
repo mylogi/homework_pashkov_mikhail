@@ -49,9 +49,9 @@ class Queue:
     def front_push(self, value):
         node = Node(value)
         cur = self.head.next
-        first_node = self.head
+        # first_node = self.head
         while cur.next is not None:
-            first_node = cur
+            # first_node = cur
             cur = cur.next
         cur.next = node
         return value
@@ -96,7 +96,15 @@ def main():
     print(f'Get: {queue.get()}')
     print(f'Push: {queue.push(66)}')
     print(f'Push: {queue.push(77)}')
-    print(f"Queue: {queue}")
+    print(f"Queue: {queue}\n")
+
+    # print(f'Pop: {queue.pop()}')
+    # print(f'Pop: {queue.pop()}')
+    # print(f'Pop: {queue.pop()}')
+    # print(f'Get: {queue.get()}')
+    # print(f'Get: {queue.get()}')
+    # print(f'Get: {queue.get()}')
+    # print(f"Queue: {queue}")
 
 
 if __name__ == "__main__":
