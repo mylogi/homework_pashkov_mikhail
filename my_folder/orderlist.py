@@ -47,7 +47,7 @@ class OrderedList:
         current = self._head
         count = 0
         while current is not None:
-            count = count + 1
+            count += 1
             current = current.get_next()
 
         return count
