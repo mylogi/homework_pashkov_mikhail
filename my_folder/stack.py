@@ -1,23 +1,27 @@
-class Queue:
+class Stack:
+
     def __init__(self):
         self._items = []
 
     def is_empty(self):
         return bool(self._items)
 
-    def enqueue(self, item):
-        self._items.insert(0, item)
+    def push(self, item):
+        self._items.append(item)
 
-    def dequeue(self):
-        return self._items.pop()
+    def pop(self):
+        return self._items.pop(0)
+
+    def peek(self):
+        return self._items[len(self._items) - 1]
 
     def size(self):
         return len(self._items)
 
     def __repr__(self):
-        representation = "<Queue>\n"
+        representation = "<Stack>\n"
         for ind, item in enumerate(reversed(self._items), 1):
-            representation += f"{ind}: {str(item)}\n"
+            representation += f'{ind}: {item}\n'
         return representation
 
     def __str__(self):
@@ -25,12 +29,19 @@ class Queue:
 
 
 if __name__ == "__main__":
-    q = Queue()
-    q.enqueue(4)
-    q.enqueue('dog')
-    q.enqueue(True)
-    print(q.size())
-    print(q)
-    print(q.dequeue())
-    print(q.dequeue())
-    print(q.dequeue())
+    s = Stack()
+
+    print(s.is_empty())
+    s.push(4)
+    s.push('dog')
+    print(s.peek())
+    s.push(True)
+    print(s.size())
+    print(s.is_empty())
+    s.push(8.4)
+    print(s.pop())
+    print(s.pop())
+    print(s.size())
+    print(s)
+    print(s.pop())
+    print(s)
