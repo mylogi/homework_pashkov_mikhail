@@ -268,6 +268,6 @@
 
 # Example 14
 
-from functools import reduce
-
-help(reduce)
+# from functools import reduce
+#
+# help(reduce)
