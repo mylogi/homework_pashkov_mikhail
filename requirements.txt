@@ -1,2 +1,4 @@
 # jupyterlab==3.2.5
 requests==2.27.1
+aiohttp[speedups]==3.8.1
+aiodns==3.0.0
