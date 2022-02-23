@@ -19,4 +19,4 @@ class SquaresTestCase(unittest.TestCase):
         self.assertEqual(l2, [1, 4, 9, 16])
 
 
-unittest.main()
+# unittest.main()
