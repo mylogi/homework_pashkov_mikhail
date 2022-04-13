@@ -8,7 +8,7 @@ Download and save to file robots.txt from wikipedia, twitter websites etc.
 
 import requests
 
-url = 'https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol'
+url = 'https://en.wikipedia.org/robots.txt'
 
 # requests.get(url)
 
