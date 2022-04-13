@@ -6,6 +6,8 @@ class WowClass:
     def __init__(self, inlist):
         self.inlist = inlist
         self.i = 0
+        self.__min_grade = self.inlist[0]
+        self.__max_grade = self.inlist[1]
 
     def __iter__(self):
         self.i = 0
@@ -47,14 +49,14 @@ class WowClass:
         return self.__val
 
     def __set__(self, instance, value):
-        if self.inlist[0] <= value <= self.inlist[1]:
+        if self.__min_grade <= value <= self.__max_grade:
             self.__val = value
             return
         raise ValueError("Wrong grade!")
 
 
 class School:
-    max_grade = WowClass([1, 9])
+    grade = WowClass([1, 9])
 
 
 def main():
@@ -90,10 +92,10 @@ def main():
 
     a += WowClass([6, 7])
 
-    s1 = School
-    s1 = 2
-    s1 = 10
-    print(s1)
+    s1 = School()
+    s1.grade = 2
+    s1.grade = 10
+    # print(s1)
 
 
 if __name__ == '__main__':
