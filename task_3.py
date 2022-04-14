@@ -11,7 +11,7 @@ import json
 
 import requests
 
-api_key = 'fc5612f9300386a0c4b8359f1014460c'
+api_key = ''
 
 units = 'units=metric'
 
