@@ -1,49 +1,63 @@
+import pprint
 from dataclasses import dataclass
 
 import requests
 from bs4 import BeautifulSoup
 
 
-# @dataclass
-# class HCPVariant:
-#     price: int
-#     size: str
+@dataclass
+class HCPVariant:
+    volume: str
+    descr: str
 
 
 @dataclass
-class HairCareProduct:
-    old_price: str
-    new_price: str
-    product_link: str
+class Product:
     name: str
-    brand: str
-    descr: str
+    product_link: str
     image: str
-    volume: str
+    brand: str
+    new_price: str
+    old_price: str
 
     def load_me(self):
         pass
 
 
 class ParseConnect:
-    BASE_URL = 'https://sisters.co.ua/v-nezmivn-zasobi'
-    session = requests.Session()
-    res = session.get(BASE_URL, headers={
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36'
-    })
-    bs = BeautifulSoup(res.text, 'lxml')
-    main_div = bs.find_all('div', class_='card')
+    BASE_URL = 'https://sisters.co.ua'
 
-    @classmethod
-    def fill_info(cls):
-        for link in cls.main_div:
-            name = link.find('div', class_='card-inner').text.strip()
-            image = 'https://sisters.co.ua' + link.find('img').attrs['src']
-            brand = link.find('div', class_='card-brand').text.strip()
-            new_price = link.find('p')
-            # find('div', class_='card-price has-text-centered').
-            # k = new_price.find('p')
-            print(new_price)
+    def __init__(self, page_url='https://sisters.co.ua/v-nezmivn-zasobi'):
+        self.page_url = page_url
+        self.session = requests.Session()
+        self.bs = None
+
+    def preload_page_bs(self):
+        res = self.session.get(self.page_url, headers={
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.88 Safari/537.36'
+        })
+        self.bs = BeautifulSoup(res.text, 'lxml')
+
+    def get_data(self) -> list[Product]:
+        self.preload_page_bs()
+        main_div = self.bs.find_all('div', class_='card')
+        self.preload_info(main_div)
+
+    def preload_info(self, product_cards: list[BeautifulSoup]):
+        product_list = []
+        for card in product_cards:
+            product_list.append(self.create_product(card))
+        return product_list
+
+    def create_product(self, card):
+        name = card.find('div', class_='card-inner').text.strip()
+        product_link = 'https://sisters.co.ua' + card.find('div', class_='card-inner').find('a').attrs['href']
+        image = 'https://sisters.co.ua' + card.find('img').attrs['src']
+        brand = card.find('div', class_='card-brand').text.strip()
+        new_price = card.find_all('p')[-1].text.replace('Ціна ', '').replace(' грн.', '')
+        old_price = card.find_all('p')[0].text.replace('Ціна ', '').replace(' грн.', '')
+        return Product(name=name, product_link=product_link, image=image, brand=brand, new_price=new_price,
+                       old_price=old_price)
 
 
 # class HCPList:
@@ -95,5 +109,5 @@ class ParseConnect:
 
 # print(ParseConnect.main_div)
 
-b = ParseConnect
-b.fill_info()
+b = ParseConnect()
+pprint.pprint(b.preload_info())
