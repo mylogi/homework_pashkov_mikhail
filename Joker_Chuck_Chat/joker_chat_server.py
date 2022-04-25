@@ -17,9 +17,11 @@ class Client:
         self.password: str = ''
 
 
-async def echo(connection: socket, loop: AbstractEventLoop) -> None:
-    while data := await loop.sock_recv(connection, 1024):
+async def echo(client: Client, loop: AbstractEventLoop) -> None:
+    while data := await loop.sock_recv(client.connection, 1024):
         # await loop.sock_sendall(connection, data)
+        if client.user_name == '':
+            await authorization(client, data)
         await send_message(data.decode())
 
 
@@ -31,8 +33,8 @@ async def listen_for_connection(server_socket: socket,
         client = Client(connection)
         list_of_connection.append(client)
         print(f"Got a connection from {address}")
-        await authorization(client)
-        asyncio.create_task(echo(connection, loop))
+        asyncio.create_task(authorization(client))
+        asyncio.create_task(echo(client, loop))
 
 
 # async def send_message_to_everyone(message):
@@ -68,8 +70,22 @@ async def send_message(message, client: Client = None):
     list_of_connection = copy_list_of_connection[:]
 
 
-async def authorization(client: Client):
-    await send_message('test', client)
+async def authorization(client: Client, data=None):
+    if data is None:
+        await send_message('Please enter your user name: ', client)
+    if client.user_name == '':
+        client.user_name = data.decode()
+        await send_message('Please enter your password: ', client)
+    if client.password == '':
+        client.password = data.decode()
+    if client.user_name in users_data.keys():
+        if client.password == users_data[client.user_name]:
+            await send_message(f'Welcome {client.user_name}!', client)
+        else:
+            await send_message('Password is incorrect', client)
+            await authorization(client)
+    else:
+        users_data[client.user_name] = client.password
 
 
 async def joke_by_chuck():
