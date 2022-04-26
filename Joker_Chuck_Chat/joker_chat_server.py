@@ -18,13 +18,13 @@ class Client:
         self.authorized: bool = False
 
 
-async def recive_data(client, loop):
+async def receive_data(client, loop):
     while data := await loop.sock_recv(client.connection, 1024):
         return data.decode()
 
 
 async def chat(client, loop):
-    while data := await recive_data(client, loop):
+    while data := await receive_data(client, loop):
         await send_message(data)
 
 
@@ -119,9 +119,9 @@ async def authorization(client: Client):
     n = 3
     while n > 0:
         await send_message('Please enter your user name: ', client)
-        client.user_name = await recive_data(client, loop)
+        client.user_name = await receive_data(client, loop)
         await send_message('Please enter your password: ', client)
-        client.password = await recive_data(client, loop)
+        client.password = await receive_data(client, loop)
         if client.user_name in users_data.keys() and client.password == users_data[client.user_name].password:
             await send_message(f'Welcome {client.user_name}', client)
             break
