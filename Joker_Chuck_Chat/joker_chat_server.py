@@ -25,12 +25,18 @@ async def receive_data(client, loop):
 
 async def chat(client, loop):
     while data := await receive_data(client, loop):
-        await send_message(data)
+        if data == 'private':
+            await get_user_names(client)
+        else:
+            await send_message(data)
 
 
 async def private_chat(client_sender: Client, client_recipient: Client, loop):
     while data := await receive_data(client_sender, loop):
-        await send_message(data, client_recipient)
+        if data == 'public chat':
+            await chat(client_sender, loop)
+        else:
+            await send_message(f'By {client_sender.user_name}-->{data}', client_recipient)
 
 
 async def echo(client: Client, loop: AbstractEventLoop) -> None:
@@ -109,7 +115,7 @@ async def authorization(client: Client):
             print(f'User name: {client.user_name}. Password: {client.password}')
             chat_task = asyncio.create_task(chat(client, asyncio.get_event_loop()))
             break
-    await asyncio.sleep(5)
+    await asyncio.sleep(1)
 
 
 async def joke_by_chuck():
@@ -129,13 +135,23 @@ async def reminder_private(client: Client = None):
     while True:
         await send_message(
             'You can use a private chat, for this you need to send a request to the chat - "private",'
-            'and then specify the username from the proposed one.', client
+            'and then specify the username from the proposed one. '
+            'To return to the general chat, enter - "public chat".', client
         )
         await asyncio.sleep(300)
 
 
 async def get_user_names(client):
+    loop = asyncio.get_event_loop()
     for val in users_data.keys():
+        if val == client.user_name:
+            continue
+        else:
+            await send_message(f'---{val}---', client)
+    asyncio.create_task(send_message('Enter the username you want to send a message to: ', client))
+    client_recipient = await receive_data(client, loop)
+    p_c_1 = private_chat(client, users_data[client_recipient], loop)
+    await p_c_1
 
 
 async def main():
