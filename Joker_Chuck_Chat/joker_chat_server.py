@@ -39,10 +39,10 @@ async def private_chat(client_sender: Client, client_recipient: Client, loop):
             await send_message(f'By {client_sender.user_name}-->{data}', client_recipient)
 
 
-async def echo(client: Client, loop: AbstractEventLoop) -> None:
-    while data := await loop.sock_recv(client.connection, 1024):
-        # await loop.sock_sendall(connection, data)
-        await send_message(data.decode())
+# async def echo(client: Client, loop: AbstractEventLoop) -> None:
+#     while data := await loop.sock_recv(client.connection, 1024):
+#         # await loop.sock_sendall(connection, data)
+#         await send_message(data.decode())
 
 
 async def listen_for_connection(server_socket: socket,
@@ -53,7 +53,7 @@ async def listen_for_connection(server_socket: socket,
         client = Client(connection)
         list_of_auth_users.append(client)
         print(f"Got a connection from {address}")
-        await authorization(client)
+        # await authorization(client)
         asyncio.create_task(reminder_private(client))
         # asyncio.create_task(echo(client, loop))
         # asyncio.create_task(chat(client, loop))
@@ -76,6 +76,7 @@ async def send_message(message, client: Client = None):
     loop = asyncio.get_event_loop()
     global list_of_auth_users
     copy_list_of_connection = list_of_auth_users[:]
+    # recipients = client or users_data.items()
     if client is None:
         for user_name, client in users_data.items():
             try:
@@ -113,7 +114,7 @@ async def authorization(client: Client):
             await send_message(f'Welcome {client.user_name}!', client)
             users_data[client.user_name] = client
             print(f'User name: {client.user_name}. Password: {client.password}')
-            chat_task = asyncio.create_task(chat(client, asyncio.get_event_loop()))
+            asyncio.create_task(chat(client, asyncio.get_event_loop()))
             break
     await asyncio.sleep(1)
 
@@ -132,6 +133,7 @@ async def joke_by_chuck():
 
 
 async def reminder_private(client: Client = None):
+    await authorization(client)
     while True:
         await send_message(
             'You can use a private chat, for this you need to send a request to the chat - "private",'
@@ -148,7 +150,7 @@ async def get_user_names(client):
             continue
         else:
             await send_message(f'---{val}---', client)
-    asyncio.create_task(send_message('Enter the username you want to send a message to: ', client))
+    await send_message('Enter the username you want to send a message to: ', client)
     client_recipient = await receive_data(client, loop)
     p_c_1 = private_chat(client, users_data[client_recipient], loop)
     await p_c_1
