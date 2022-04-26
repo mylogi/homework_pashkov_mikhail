@@ -4,7 +4,7 @@ from asyncio import AbstractEventLoop
 
 import aiohttp
 
-list_of_connection = []
+list_of_auth_users = []
 
 users_data = {}
 
@@ -15,13 +15,22 @@ class Client:
         self.connection = connection
         self.user_name: str = ''
         self.password: str = ''
+        self.authorized: bool = False
+
+
+async def recive_data(client, loop):
+    while data := await loop.sock_recv(client.connection, 1024):
+        return data.decode()
+
+
+async def chat(client, loop):
+    while data := await recive_data(client, loop):
+        await send_message(data)
 
 
 async def echo(client: Client, loop: AbstractEventLoop) -> None:
     while data := await loop.sock_recv(client.connection, 1024):
         # await loop.sock_sendall(connection, data)
-        if client.user_name == '':
-            await authorization(client, data)
         await send_message(data.decode())
 
 
@@ -31,31 +40,34 @@ async def listen_for_connection(server_socket: socket,
         connection, address = await loop.sock_accept(server_socket)
         connection.setblocking(False)
         client = Client(connection)
-        list_of_connection.append(client)
+        # list_of_auth_users.append(client)
         print(f"Got a connection from {address}")
         asyncio.create_task(authorization(client))
-        asyncio.create_task(echo(client, loop))
+        # await authorization(client)
+
+        # asyncio.create_task(echo(client, loop))
+        # asyncio.create_task(chat(client, loop))
 
 
 # async def send_message_to_everyone(message):
 #     loop = asyncio.get_event_loop()
-#     global list_of_connection
-#     copy_list_of_connection = list_of_connection[:]
-#     for client in list_of_connection:
+#     global list_of_auth_users
+#     copy_list_of_connection = list_of_auth_users[:]
+#     for client in list_of_auth_users:
 #         try:
 #             await loop.sock_sendall(client.connection, message.encode())
 #         except Exception as e:
 #             print(e)
 #             copy_list_of_connection.remove(client)
-#     list_of_connection = copy_list_of_connection[:]
+#     list_of_auth_users = copy_list_of_connection[:]
 
 
 async def send_message(message, client: Client = None):
     loop = asyncio.get_event_loop()
-    global list_of_connection
-    copy_list_of_connection = list_of_connection[:]
+    global list_of_auth_users
+    copy_list_of_connection = list_of_auth_users[:]
     if client is None:
-        for client in list_of_connection:
+        for user_name, client in users_data.items():
             try:
                 await loop.sock_sendall(client.connection, message.encode())
             except Exception as e:
@@ -67,25 +79,39 @@ async def send_message(message, client: Client = None):
         except Exception as e:
             print(e)
             copy_list_of_connection.remove(client)
-    list_of_connection = copy_list_of_connection[:]
+    # list_of_auth_users = copy_list_of_connection[:]
 
 
-async def authorization(client: Client, data=None):
-    if data is None:
-        await send_message('Please enter your user name: ', client)
+async def authorization(client: Client):
+    loop = asyncio.get_event_loop()
+    await send_message('Please enter your user name: ', client)
+    # while data := await loop.sock_recv(client.connection, 1024):
     if client.user_name == '':
-        client.user_name = data.decode()
+        client.user_name = await recive_data(client, loop)
+        if client.user_name in users_data.keys():
+            await send_message('User name is already exists ', client)
+            client.user_name = ''
+            client.password = ''
+            await authorization(client)
         await send_message('Please enter your password: ', client)
-    if client.password == '':
-        client.password = data.decode()
+    if client.password == '' and client.user_name != '':
+        client.password = await recive_data(client, loop)
     if client.user_name in users_data.keys():
-        if client.password == users_data[client.user_name]:
+        if client.password == users_data[client.user_name].password:
             await send_message(f'Welcome {client.user_name}!', client)
+            client.authorized = True
         else:
-            await send_message('Password is incorrect', client)
+            await send_message('Password is incorrect\n', client)
+            client.user_name = ''
+            client.password = ''
             await authorization(client)
     else:
-        users_data[client.user_name] = client.password
+        await send_message(f'Welcome {client.user_name}!', client)
+        users_data[client.user_name] = client
+        print(f'{client.user_name} - {client.password}')
+        chat_task = asyncio.create_task(chat(client, asyncio.get_event_loop()))
+        # await chat_task
+        # list_of_auth_users.append(client)
 
 
 async def joke_by_chuck():
