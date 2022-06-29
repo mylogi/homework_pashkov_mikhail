@@ -1,3 +1,7 @@
+import multiprocessing
+import os
+import time
+
 # Example 1:
 
 # def test(name):
@@ -17,7 +21,6 @@
 #
 # if __name__ == '__main__':
 #     multi_now()
-
 
 # Example 2:
 
@@ -195,8 +198,8 @@
 #         print(next(it))
 #         print(it.next(timeout=1))
 #
-#     result = pool.apply_async(time.sleep, (10,))
-#     print(result.get(timeout=1))
+#         result = pool.apply_async(time.sleep, (10,))
+#         print(result.get(timeout=1))
 #
 #
 # if __name__ == '__main__':
